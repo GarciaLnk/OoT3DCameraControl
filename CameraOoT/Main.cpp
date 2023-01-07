@@ -312,7 +312,7 @@ int main(int, char**)
 
 		if (!pause)
 		{
-			constexpr float lenght_base = 250.0f;
+			constexpr float length_base = 250.0f;
 			WriteProcessMemory(h_process, reinterpret_cast<void*>(look_at_camera), &look_link, sizeof(uint16_t), nullptr);
 			ReadProcessMemory(h_process, reinterpret_cast<void*>(local_player), &x, sizeof(float), nullptr);
 			ReadProcessMemory(h_process, reinterpret_cast<void*>(local_player + 0x04), &y, sizeof(float), nullptr);
@@ -357,9 +357,9 @@ int main(int, char**)
 			}
 
 			const float theta = base_angle * numbers::pi_v<float> / 180.0f;
-			dx = (cos(theta) * lenght_base) + x;
+			dx = (cos(theta) * length_base) + x;
 			dy = base_height + y;
-			dz = (sin(theta) * lenght_base) + z;
+			dz = (sin(theta) * length_base) + z;
 
 			if (!reset_angle)
 			{

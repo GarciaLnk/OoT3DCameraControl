@@ -69,8 +69,7 @@ const uint8_t* Search(const uint8_t* data, const uint32_t size, const uint8_t* p
 #pragma omp flush(abort)
 		if (!abort)
 		{
-			const auto block = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(data) + i);
-			if (_mm256_testz_si256(block, block))
+			if (const auto block = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(data) + i); _mm256_testz_si256(block, block))
 				continue;
 
 			auto offset = _mm_cmpestri(parts[0].needle, firstlen, _mm_loadu_si128(reinterpret_cast<const __m128i*>(data + i * 32)), 16,
@@ -86,8 +85,7 @@ const uint8_t* Search(const uint8_t* data, const uint32_t size, const uint8_t* p
 			for (intptr_t j = 0; j < num_parts; ++j)
 			{
 				const auto hay = _mm_loadu_si128(reinterpret_cast<const __m128i*>(data + (2 * i + j) * 16 + offset));
-				const auto bitmask = _mm_movemask_epi8(_mm_cmpeq_epi8(hay, parts[j].needle));
-				if ((bitmask & parts[j].mask) != parts[j].mask)
+				if (const auto bitmask = _mm_movemask_epi8(_mm_cmpeq_epi8(hay, parts[j].needle)); (bitmask & parts[j].mask) != parts[j].mask)
 					goto next;
 			}
 
@@ -126,15 +124,13 @@ uintptr_t SearchInProcessMemory(const HANDLE h_process, const uint8_t* pattern, 
 	while (result == 0)
 	{
 		SIZE_T bytes_read = 0;
-		const BOOL success = ReadProcessMemory(h_process, read_addr, buffer.get(), buffer_size, &bytes_read);
-		if (!success || bytes_read == 0)
+		if (const BOOL success = ReadProcessMemory(h_process, read_addr, buffer.get(), buffer_size, &bytes_read); !success || bytes_read == 0)
 		{
 			read_addr += buffer_size;
 			continue;
 		}
 
-		const void* ptr = Search(buffer.get(), bytes_read, pattern, mask);
-		if (ptr != nullptr)
+		if (const void* ptr = Search(buffer.get(), bytes_read, pattern, mask); ptr != nullptr)
 		{
 			result = reinterpret_cast<uintptr_t>(read_addr) + (reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(buffer.get()));
 			break;
