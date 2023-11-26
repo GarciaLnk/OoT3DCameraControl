@@ -1,4 +1,6 @@
-Free camera control hack for The Legend of Zelda: Ocarina of Time 3D.
+### Free camera control hack for The Legend of Zelda: Ocarina of Time 3D.
+
+**NOTICE: most users should use this mod instead https://github.com/Roberto-Nessy/OoT3D_Standalone_Free_Cam**
 
 This tool scans the memory of Citra to find and modify the addresses corresponding to the LocalPlayer and LocalCamera.
 
